@@ -1,4 +1,4 @@
-import input
+import input # another file for input
 
 # tasks
 tasks = []
@@ -16,8 +16,8 @@ def Showtask():
 
 # add-task function
 def Addtask():
-    new_task = input.get_str()
-    tasks.append(new_task)
+    ntask = input("Enter Task: ")
+    tasks.append(ntask)
     print("task added.")
     # calling show function
     Showtask()
@@ -48,32 +48,27 @@ def getMenu():
         options = getOptions()
         for i in ["Remove", "Update", "Display"]:
             options.remove(i)
-    for option in options:
+    for i in options:
         n = 1
-        print(f"{n}. " + option)
+        print(f"{n}. " + "options")
     return n
 
 
-def main():
-    # Infinite Loop
-    while True:
-        # if conditional: continue if choice is smaller than 4.
-        choice = input.get_Val(getMenu())
-        match choice:
-            case 0:
-                # keyword to stop the loop.
-                break
-            case 1:
-                # calling add-task
-                Addtask()
-            case 2:
-                # calling remove-task
-                Removetask()
-            case 3:
-                # calling show-task
-                Showtask()
-            # default case
-
-
-if __name__ == "__main__":
-    main()
+# Infinite Loop
+while True:
+    # if conditional: continue if choice is smaller than 4.
+    choice = input.get_Val(getMenu())
+    match choice:
+        case 0:
+            # keyword to stop the loop.
+            break
+        case 1:
+            # calling add-task
+            Addtask()
+        case 2:
+            # calling remove-task
+            Removetask()
+        case 3:
+            # calling show-task
+            Showtask()
+        # default case
