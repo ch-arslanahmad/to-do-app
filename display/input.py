@@ -10,5 +10,9 @@ def get_Val(n):
         print("Enter a integer!")
 
 
-def get_str():
-    return input("Enter: ")
+def get_str(req):
+    return input(f"Enter {req}: ")
+
+
+def get_num(req):
+    return int(input(f"Enter {req}: "))
