@@ -1,74 +1,67 @@
-import input # another file for input
-
-# tasks
-tasks = []
-
-
-# show function
-def Showtask():
-    n = 1
-    if tasks:
-        for i in tasks:
-            print(f"{n}. {i}")
-            n = n + 1
-    print("_" * 15)
+import input  # another file for input
+import database  # for database queries
+import map  # for mapping IDs
+import display  # Get Display
 
 
-# add-task function
-def Addtask():
-    ntask = input("Enter Task: ")
-    tasks.append(ntask)
-    print("task added.")
-    # calling show function
-    Showtask()
+def main():
+    tasks = database.get_tasks()
+    tasks = [task[0] for task in tasks]
+    # Infinite Loop
+    while True:
+        count = database.count_tasks()
+        choice = input.get_Val(display.getMenu(tasks) - 1)
+        match choice:
+            case 0:  # stop the loop.
+                print(f"Count: {count}")
+                break
+            case 1:  # calling add
+                database.add_task(
+                    input.get_str(
+                        "task",
+                    )
+                )
+                display.show_tasks(database.get_tasks())
+                count = database.count_tasks()
+            case 2:  # remove task
+                display.show_tasks(database.get_tasks())
+                db_id = map.get_mapped_db_id(input.get_Val(count))
+                if db_id is None:  # as 0 is also treated as False
+                    print("ID is invalid.")
+                    break
+                database.remove_task(db_id)
+                count = database.count_tasks()
+            case 3:  # update task
+                display.show_tasks(database.get_tasks())
+
+                db_id = map.get_mapped_db_id(input.get_Val(count))
+
+                if db_id is None:  # as 0 is also treated as False
+                    print("ID is invalid.")
+                    break
+
+                database.update_task(db_id, input.get_str("Enter updated Task"))
+            case 4:  # calling show
+                display.show_tasks(database.get_tasks())
+
+            case 5:  # updating status
+                display.show_tasks(database.get_tasks())
+                db_id = map.get_mapped_db_id(input.get_Val(count))
+                if db_id is None:  # as 0 is also treated as False
+                    print("ID is invalid.")
+                    break
+                while True:
+                    status = input.get_str("Status")
+                    if status == "0":
+                        break
+                    elif status not in ["todo", "pending", "done"]:
+                        print("Invalid Status")
+                        continue
+                    else:
+                        database.update_task_status(db_id, status)  # update task status
+                        display.show_tasks(database.get_tasks())
+                        break
 
 
-# remove-task function
-def Removetask():
-    if not tasks:
-        print("No Task available to remove.")
-    else:
-        try:
-            i = int(input("which position to remove: "))
-            tasks.pop(i - 1)
-            print("task removed.")
-            # calling show function
-            Showtask()
-        except (ValueError, IndexError):
-            print("The value is out of range.")
-
-
-def getOptions():
-    options = ["Add", "Remove", "Update", "Display"]
-    return options
-
-
-def getMenu():
-    if not tasks:
-        options = getOptions()
-        for i in ["Remove", "Update", "Display"]:
-            options.remove(i)
-    for i in options:
-        n = 1
-        print(f"{n}. " + "options")
-    return n
-
-
-# Infinite Loop
-while True:
-    # if conditional: continue if choice is smaller than 4.
-    choice = input.get_Val(getMenu())
-    match choice:
-        case 0:
-            # keyword to stop the loop.
-            break
-        case 1:
-            # calling add-task
-            Addtask()
-        case 2:
-            # calling remove-task
-            Removetask()
-        case 3:
-            # calling show-task
-            Showtask()
-        # default case
+if __name__ == "__main__":
+    main()
