@@ -1,7 +1,7 @@
-import input  # another file for input
+from display import input  # another file for input
 import database  # for database queries
-import map  # for mapping IDs
-import display  # Get Display
+from utils import map  # for mapping IDs
+from display import display  # Get Display
 
 
 def main():
@@ -26,6 +26,8 @@ def main():
             case 2:  # remove task
                 display.show_tasks(database.get_tasks())
                 db_id = map.get_mapped_db_id(input.get_Val(count))
+                if db_id == 0:
+                    continue
                 if db_id is None:  # as 0 is also treated as False
                     print("ID is invalid.")
                     break
